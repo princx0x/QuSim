@@ -4,11 +4,12 @@ import numpy as np
 atol = 1e-9 #tolerance for magnitude of the state
 
 #MATRICES FOR GATES
-i = np.array([[1,0],[0,1]])
-x = np.array([[0,1],[1,0]])
+i = np.array([[1,0],[0,1]],dtype=complex)
+x = np.array([[0,1],[1,0]],dtype=complex)
 y = np.array([[0,-1j],[1j,0]],dtype=complex)
-z = np.array([[1,0],[0,-1]])
+z = np.array([[1,0],[0,-1]],dtype=complex)
 h = np.array([[1,1],[1,-1]]) / (np.sqrt(2))
+h = np.array(h,dtype=complex)
 s = np.array([[1,0],[0,1j]],dtype=complex)
 t = np.array([[1,0],[0,(1+1j)/np.sqrt(2)]],dtype=complex)
 
