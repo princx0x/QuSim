@@ -30,3 +30,32 @@ def S(state):
 
 def T(state):
     return apply_gate(t,state)
+
+def rx(theta):
+    """Rotation about the X axis by angle theta. Returns a 2x2 complex matrix."""
+    c = np.cos(theta/2)
+    s =  -1*np.sin(theta/2)*1j
+    matrix = np.array([[c,s],
+                       [s,c]],dtype = complex)
+    return matrix
+
+def ry(theta):
+    """Rotation about the Y axis by angle theta. Returns a 2x2 complex matrix."""
+    c = np.cos(theta/2)
+    s =  -1*np.sin(theta/2)
+    matrix = np.array([[c,s],
+                    [-1*s,c]],dtype = complex)
+    return matrix
+
+def rz(theta):
+    """Rotation about the Z axis by angle theta. Returns a 2x2 complex matrix."""
+    E = np.exp(1j*(theta/2)*(-1))
+    matrix = np.array([[E,0],
+                       [0,1/E]],dtype = complex)
+    return matrix
+
+def phase(phi):
+    """Phase gate diag(1, e^(i*phi)). Returns a 2x2 complex matrix."""
+    matrix = np.array([[1,0],
+                       [0,np.exp(1j*phi)]],dtype=complex)
+    return matrix
