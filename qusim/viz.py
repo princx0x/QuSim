@@ -2,14 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from .measure import _test_valid_state
 
-def plot_histogram(counts):
+def plot_histogram(counts, ax = None):
     """Bar chart of measurement counts (a measurement histogram)."""
+    if ax is None:
+       _, ax = plt.subplots()
     keys = sorted(counts)
     values = [counts[i] for i in keys]
-    bars = plt.bar(keys, values)
-    plt.xlabel('Outcome')
-    plt.ylabel('Counts')
-    plt.bar_label(bars)
+    bars = ax.bar(keys, values)
+    ax.set_xlabel('Outcome')
+    ax.set_ylabel('Counts')
+    ax.bar_label(bars)
+    return ax
 
 def bloch_coordinates(state):
     """Return (x, y, z) for a single-qubit state."""
