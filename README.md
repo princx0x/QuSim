@@ -1,6 +1,6 @@
 # QuSim
-A Quantum Circuit Simulator from Scratch
 
+A Quantum Circuit Simulator from Scratch.
 
 ## Progress so far
 
