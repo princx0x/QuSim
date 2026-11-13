@@ -225,3 +225,12 @@ Timeline.md
 
 #pytests folder
 .vscode/
+
+# Web Application
+webapp/
+
+# Jupyter notebook checkpoints and stored run history
+.ipynb_checkpoints/
+
+# Local virtual environment
+.venv/
