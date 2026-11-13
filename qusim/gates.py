@@ -1,7 +1,8 @@
-"""Single-qubit gate matrices and helpers for QuSim.
+"""Gate matrices and helpers for QuSim.
 
 The lowercase names are the complex matrices; the uppercase helpers apply a
-matrix to a state. Rotation helpers return matrices rather than applying them.
+matrix to a state. Matrices range from single-qubit 2x2 gates to two-qubit 4x4
+gates, and rotation helpers return matrices rather than applying them.
 """
 
 import numpy as np
@@ -16,6 +17,37 @@ z = np.array([[1, 0], [0, -1]], dtype=complex)
 h = np.array([[1, 1], [1, -1]], dtype=complex) / np.sqrt(2)
 s = np.array([[1, 0], [0, 1j]], dtype=complex)
 t = np.array([[1, 0], [0, (1 + 1j) / np.sqrt(2)]], dtype=complex)
+
+# Two-qubit gate matrices.
+cnot = np.array(
+    [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 0, 1],
+        [0, 0, 1, 0],
+    ],
+    dtype=complex,
+)
+
+cz = np.array(
+    [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, -1],
+    ],
+    dtype=complex,
+)
+
+swap = np.array(
+    [
+        [1, 0, 0, 0],
+        [0, 0, 1, 0],
+        [0, 1, 0, 0],
+        [0, 0, 0, 1],
+    ],
+    dtype=complex,
+)
 
 
 # Gate helpers: apply the matching matrix to a state.
@@ -47,6 +79,22 @@ def S(state):
 def T(state):
     """Apply the T (pi/8) gate."""
     return apply_gate(t, state)
+
+
+# Two-qubit gate helpers: apply the matching 4x4 matrix to a two-qubit state.
+def CNOT(state):
+    """Apply the controlled-NOT gate."""
+    return apply_gate(cnot, state)
+
+
+def CZ(state):
+    """Apply the controlled-Z gate."""
+    return apply_gate(cz, state)
+
+
+def SWAP(state):
+    """Apply the SWAP gate."""
+    return apply_gate(swap, state)
 
 
 # Rotation and phase helpers: return a 2x2 matrix for the given angle.

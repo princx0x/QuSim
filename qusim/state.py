@@ -12,14 +12,20 @@ atol = 1e-9
 
 
 def apply_gate(gate, state):
-    """Apply a single-qubit gate matrix to a state and return the new state."""
+    """Apply a gate matrix to a state and return the new state.
+
+    The gate must be a square matrix whose dimension matches the length of
+    ``state``, so the same helper works for one- and two-qubit gates.
+    """
     state = np.asarray(state, dtype=complex)
+    gate = np.asarray(gate, dtype=complex)
     norm = np.vdot(state, state).real
     if not np.isclose(norm, 1.0, atol):
         raise ValueError(f'Expected a state of magnitude 1, got magnitude = {norm}')
-    elif gate.shape != (2, 2) or state.shape != (2,):
+    elif state.ndim != 1 or gate.shape != (state.size, state.size):
         raise ValueError(
-            f'Expected a 2x2 gate and a length-2 state, got {gate.shape} and {state.shape}'
+            f'Expected a {state.size}x{state.size} gate for a length-{state.size} '
+            f'state, got {gate.shape} and {state.shape}'
         )
     else:
         return gate @ state
@@ -46,6 +52,27 @@ def normalize(state):
     if np.isclose(norm, 0):
         raise ValueError('Cannot normalize the zero state')
     return out / norm
+
+
+# The four Bell states, each as a normalized two-qubit state vector.
+def bell_phi_plus():
+    """Return the Bell state (|00> + |11>) / sqrt(2)."""
+    return normalize([1, 0, 0, 1])
+
+
+def bell_phi_minus():
+    """Return the Bell state (|00> - |11>) / sqrt(2)."""
+    return normalize([1, 0, 0, -1])
+
+
+def bell_psi_plus():
+    """Return the Bell state (|01> + |10>) / sqrt(2)."""
+    return normalize([0, 1, 1, 0])
+
+
+def bell_psi_minus():
+    """Return the Bell state (|01> - |10>) / sqrt(2)."""
+    return normalize([0, 1, -1, 0])
 
 
 def probabilities(state):

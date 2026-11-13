@@ -65,6 +65,53 @@ def test_h_of_zero_state_gives_equal_probabilities():
     assert np.allclose(result, [0.5, 0.5])
 
 
+# Two-qubit gates.
+TWO_QUBIT_GATES = [gates.cnot, gates.cz, gates.swap]
+
+
+@pytest.mark.parametrize('gate', TWO_QUBIT_GATES)
+def test_two_qubit_gate_is_unitary(gate):
+    """CNOT, CZ and SWAP are unitary 4x4 matrices."""
+    assert np.allclose(gate.conj().T @ gate, np.eye(4))
+
+
+def test_cnot_flips_the_target_when_control_is_one():
+    """CNOT maps |10> to |11> and leaves |00> unchanged."""
+    assert np.allclose(gates.cnot @ state.basis_state('10'), state.basis_state('11'))
+    assert np.allclose(gates.cnot @ state.basis_state('00'), state.basis_state('00'))
+
+
+def test_cz_only_flips_the_sign_of_eleven():
+    """CZ applies a minus sign only to |11>."""
+    assert np.allclose(gates.cz @ state.basis_state('11'), -state.basis_state('11'))
+    assert np.allclose(gates.cz @ state.basis_state('10'), state.basis_state('10'))
+
+
+def test_swap_exchanges_the_two_qubits():
+    """SWAP maps |01> to |10>."""
+    assert np.allclose(gates.swap @ state.basis_state('01'), state.basis_state('10'))
+
+
+@pytest.mark.parametrize(
+    'helper, matrix',
+    [
+        (gates.CNOT, gates.cnot),
+        (gates.CZ, gates.cz),
+        (gates.SWAP, gates.swap),
+    ],
+)
+def test_two_qubit_helpers_match_their_matrices(helper, matrix):
+    """Each helper applies its gate matrix to a two-qubit state."""
+    psi = state.normalize([1, 1j, 0, 1])
+    assert np.allclose(helper(psi), matrix @ psi)
+
+
+def test_two_qubit_gate_rejects_wrong_state_size():
+    """A 4x4 gate cannot be applied to a single-qubit state."""
+    with pytest.raises(ValueError):
+        gates.CNOT(state.zero_state(1))
+
+
 # Rotation gates.
 ANGLES = [0, 0.5, 1, np.pi / 2, np.pi, 2 * np.pi, -1.3]
 ROTATIONS = [gates.rx, gates.ry, gates.rz]
